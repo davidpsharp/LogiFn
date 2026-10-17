@@ -11,7 +11,23 @@
 > probe froze it). The conversation that built it is in
 > [docs/how-it-was-made.md](docs/how-it-was-made.md).
 
-Source and releases: https://github.com/davidpsharp/LogiFn
+## Download
+
+**[Download LogiFn 0.01](https://github.com/davidpsharp/LogiFn/releases/download/v0.01/LogiFn-0.01.zip)**
+(zip, 30 KB), or see [all releases](https://github.com/davidpsharp/LogiFn/releases).
+
+To try it on RISC OS 5:
+
+1. Unpack the zip on the RISC OS machine (SparkFS, SparkPlug or Info-ZIP
+   keep the filetypes).
+2. Double-click `LogiFn` to load it, press a key on the keyboard, and F1–F12
+   now work without Fn. `*LogiFn` shows what it found.
+3. To load it at every start-up, copy `LogiFn` into
+   `!Boot.Choices.Boot.PreDesk`.
+
+The zip also has the source, the licence and the `hidpp` diagnostic tool. The
+module on its own is attached to the release too, as `LogiFn,ffa`.
+
 
 A RISC OS 5 module that keeps a Logitech K400 Plus keyboard's top row in
 function-key mode, so F1–F12 work without holding Fn. It also works with other
