@@ -1,0 +1,15 @@
+#!/bin/sh
+# Builds the module in the GCCSDK container.
+#   tools/build [clean]
+set -e
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+IMAGE=${LOGIFN_GCCSDK_IMAGE:-riscosdotinfo/riscos-gccsdk-4.7}
+# -B: Docker's clock can lag the host's, which confuses make's timestamps.
+quiet() { grep -v -e "requested image's platform" -e "Clock skew" -e "in the future" || true; }
+if ! OUT=$(docker run --rm --platform linux/amd64 -v "$ROOT":/src -w /src "$IMAGE" \
+    make -B "$@" 2>&1); then
+  printf '%s\n' "$OUT" | quiet
+  echo "build: failed" >&2
+  exit 1
+fi
+printf '%s\n' "$OUT" | quiet

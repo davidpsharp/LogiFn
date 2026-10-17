@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+"""Makes the release zip, ready to unpack on a RISC OS machine.
+
+    tools/package          after tools/build; writes dist/LogiFn-<version>.zip
+
+The zip holds a LogiFn directory: the module, its ReadMe and Licence, the
+hidpp diagnostic tool and the source. Filetypes are kept the way SparkFS and
+Info-ZIP do (an ARC0 extra field), so any RISC OS unzipper restores them.
+"""
+
+import re
+import struct
+import sys
+import time
+import zipfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def riscos_extra(filetype: int, when: float) -> bytes:
+    """The ARC0 extra field: load and exec addresses (filetype and date) and
+    attributes (owner read/write, public read)."""
+    cs = int((when + 2208988800) * 100)          # centiseconds since 1900
+    load = 0xFFF00000 | (filetype << 8) | ((cs >> 32) & 0xFF)
+    body = b"ARC0" + struct.pack("<IIII", load, cs & 0xFFFFFFFF, 0x13, 0)
+    return struct.pack("<HH", 0x4341, len(body)) + body
+
+
+def add(z: zipfile.ZipFile, name: str, data: bytes, filetype: int, when: float) -> None:
+    info = zipfile.ZipInfo(name, time.localtime(when)[:6])
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.extra = riscos_extra(filetype, when)
+    info.external_attr = 0o644 << 16
+    z.writestr(info, data)
+
+
+def main() -> int:
+    cmhg = (ROOT / "src" / "ModHdr.cmhg").read_text()
+    version = re.search(r"help-string:\s*LogiFn\s+(\S+)", cmhg).group(1)
+    module = ROOT / "build" / "LogiFn,ffa"
+    if not module.exists():
+        print("package: build/LogiFn,ffa is missing; run tools/build first", file=sys.stderr)
+        return 1
+    files = [                                    # (name in the zip, source, filetype)
+        ("LogiFn", module, 0xFFA),
+        ("ReadMe", ROOT / "README.md", 0xFFF),
+        ("Licence", ROOT / "LICENSE", 0xFFF),
+        ("hidpp", ROOT / "tools" / "hidpp.bas", 0xFFF),
+        ("Source/c/logifn", ROOT / "src" / "logifn.c", 0xFFF),
+        ("Source/cmhg/ModHdr", ROOT / "src" / "ModHdr.cmhg", 0xFFF),
+        ("Source/Makefile", ROOT / "Makefile", 0xFE1),
+    ]
+    out = ROOT / "dist"
+    out.mkdir(exist_ok=True)
+    when = time.time()
+    zpath = out / f"LogiFn-{version}.zip"
+    with zipfile.ZipFile(zpath, "w") as z:
+        z.comment = (f"LogiFn {version}, built 100% by Claude (Anthropic's AI). "
+                     "GPL v3. https://github.com/davidpsharp").encode()
+        for name, src, filetype in files:
+            add(z, "LogiFn/" + name, src.read_bytes(), filetype, when)
+    print(f"{zpath.relative_to(ROOT)}: {len(files)} files")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,31 @@
+; LogiFn - keeps Logitech wireless keyboards (K400 Plus and others with an
+; HID++ Fn-inversion feature) in function-key mode on RISC OS 5.
+; Module header for CMunge (GCCSDK).
+;
+; Copyright (C) 2026 David Sharp, https://github.com/davidpsharp
+; GPL v3 or later: see LICENSE.
+; Built 100% by Claude, Anthropic's AI (Claude Code), entirely from a Mac,
+; tested on a Raspberry Pi over the network with Rorth.
+
+title-string: LogiFn
+
+help-string: LogiFn 0.01 David Sharp
+
+date-string: 18 Oct 2026
+
+initialisation-code: lf_init
+
+finalisation-code: lf_final
+
+; Service_DeviceDead, Service_USB
+service-call-handler: lf_service 0x79 0xD2
+
+command-keyword-table: lf_command
+  LogiFn(min-args: 0, max-args: 0,
+    help-text: "*LogiFn shows the Logitech receivers and keyboards LogiFn has found, the mode each keyboard was set to, and recent events. LogiFn was built 100% by Claude, Anthropic's AI, entirely from a Mac using Claude Code and Rorth, for David Sharp (https://github.com/davidpsharp). GPL v3.\n"),
+  LogiFnMode(min-args: 0, max-args: 1,
+    help-text: "*LogiFnMode FKeys makes F1-F12 send function keys without Fn (the default); *LogiFnMode Media makes them send their media/shortcut actions, as the keyboard does by default. With no argument, shows the current mode.\n",
+    invalid-syntax: "Syntax: *LogiFnMode [FKeys|Media]")
+
+generic-veneers: lf_callback_entry/lf_callback_handler,
+                 lf_ticker_entry/lf_ticker_handler
