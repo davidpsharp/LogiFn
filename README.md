@@ -8,7 +8,8 @@
 > develop it. The only hands-on part was testing: [David
 > Sharp](https://github.com/davidpsharp) pressed keys and switched the
 > keyboard off and on when asked (and power-cycled the Pi once, when an early
-> probe froze it).
+> probe froze it). The conversation that built it is in
+> [docs/how-it-was-made.md](docs/how-it-was-made.md).
 
 Source and releases: https://github.com/davidpsharp/LogiFn
 
