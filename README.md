@@ -10,6 +10,8 @@
 > keyboard off and on when asked (and power-cycled the Pi once, when an early
 > probe froze it).
 
+Source and releases: https://github.com/davidpsharp/LogiFn
+
 A RISC OS 5 module that keeps a Logitech K400 Plus keyboard's top row in
 function-key mode, so F1–F12 work without holding Fn. It also works with other
 Logitech wireless keyboards that have an HID++ Fn-inversion feature.
@@ -93,4 +95,4 @@ LogiFn first.
 ## Licence
 
 GNU General Public License, version 3 or later: see [LICENSE](LICENSE).
-Copyright (C) 2026 David Sharp, https://github.com/davidpsharp.
+Copyright (C) 2026 [David Sharp](https://github.com/davidpsharp).

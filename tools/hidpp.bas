@@ -1,6 +1,6 @@
 REM >hidpp - send one HID++ request to a Logitech receiver, or watch it
 REM Diagnostic tool for LogiFn. (C) 2026 David Sharp, GPL v3 or later
-REM https://github.com/davidpsharp
+REM https://github.com/davidpsharp/LogiFn
 REM Built 100% by Claude, Anthropic's AI (Claude Code).
 REM Unload LogiFn first (*RMKill LogiFn): only
 REM one program can have the receiver's HID++ stream open.

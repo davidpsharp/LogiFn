@@ -1,7 +1,7 @@
 /* LogiFn: keeps Logitech wireless keyboards in function-key mode.
  *
  * Copyright (C) 2026 David Sharp
- * https://github.com/davidpsharp
+ * https://github.com/davidpsharp/LogiFn
  *
  * Built 100% by Claude, Anthropic's AI (Claude Code), from research to
  * code and testing, entirely from a Mac: it was tested on a Raspberry Pi

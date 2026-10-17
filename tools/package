@@ -57,7 +57,7 @@ def main() -> int:
     zpath = out / f"LogiFn-{version}.zip"
     with zipfile.ZipFile(zpath, "w") as z:
         z.comment = (f"LogiFn {version}, built 100% by Claude (Anthropic's AI). "
-                     "GPL v3. https://github.com/davidpsharp").encode()
+                     "GPL v3. https://github.com/davidpsharp/LogiFn").encode()
         for name, src, filetype in files:
             add(z, "LogiFn/" + name, src.read_bytes(), filetype, when)
     print(f"{zpath.relative_to(ROOT)}: {len(files)} files")
